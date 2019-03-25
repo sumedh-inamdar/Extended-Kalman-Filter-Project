@@ -72,27 +72,45 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     }
 
     // done initializing, no need to predict or update
+    previous_timestamp_ = measurement_pack.timestamp_;
     is_initialized_ = true;
     return;
   }
+    
+    
 
   /**
    * Prediction
    */
 
   /**
-   * TODO: Update the state transition matrix F according to the new elapsed time.
-   * Time is measured in seconds.
-   * TODO: Update the process noise covariance matrix.
-   * Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
-   */
-
+    * TODO: Update the process noise covariance matrix.
+    * Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
+    */
+  float dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0;
+  previous_timestamp_ = measurement_pack.timestamp_;
+  
+  //Update state transition matrix F with new elapsed time: dt.
+  ekf_.F_(0, 2) = dt;
+  ekf_.F_(1, 3) = dt;
+  
+  //Update process noise covariance matrix Q with initialized variables
+  float dt2 = dt * dt;
+  float dt3 = dt2 * dt;
+  float dt4 = dt3 * dt;
+  float noise_ax = 9;
+  float noise_ay = 9;
+  ekf_.Q_ = MatrixXd(4,4);
+  ekf_.Q_ << dt4/4*noise_ax, 0, dt3/2*noise_ax, 0,
+            0, dt4/4*noise_ay, 0, dt3/2*noise_ay,
+            dt3/2*noise_ax, 0, dt2*noise_ax, 0,
+            0, dt3/2*noise_ay, 0, dt2*noise_ay;
+  
   ekf_.Predict();
 
   /**
    * Update
    */
-
   /**
    * TODO:
    * - Use the sensor type to perform the update step.
@@ -100,10 +118,12 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
    */
 
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
-    // TODO: Radar updates
+    // TODO: Radar updates, convert radar measurement from polar to cartesian
+    ekf_.UpdateEKF()
 
   } else {
     // TODO: Laser updates
+    ekf_.Update(measurement_pack.raw_measurements_);
 
   }
 

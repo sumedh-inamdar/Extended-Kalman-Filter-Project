@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:src/FusionEKF.cpp">
+   </FileRef>
+   <FileRef
+      location = "group:src/FusionEKF.h">
+   </FileRef>
+   <FileRef
+      location = "group:src/json.hpp">
+   </FileRef>
+   <FileRef
+      location = "group:src/kalman_filter.cpp">
+   </FileRef>
+   <FileRef
+      location = "group:src/kalman_filter.h">
+   </FileRef>
+   <FileRef
+      location = "group:src/main.cpp">
+   </FileRef>
+   <FileRef
+      location = "group:src/measurement_package.h">
+   </FileRef>
+   <FileRef
+      location = "group:src/tools.cpp">
+   </FileRef>
+   <FileRef
+      location = "group:src/tools.h">
+   </FileRef>
+</Workspace>
